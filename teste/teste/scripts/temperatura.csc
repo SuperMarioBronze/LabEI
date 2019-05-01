@@ -8,3 +8,4 @@ println temp enviada: $c
 data d $id $c ZonaA
 send $d 1
 end
+delay 1000
