@@ -1,4 +1,6 @@
+atget id id
 loop
+radio radio1
 wait
 read a
 rdata $a ID Temp Zona
@@ -11,3 +13,6 @@ else
 	led 1 2
 	print "Fora dos valores seguros!"
 end
+data d $id $Temp
+radio radio2
+send $d 4

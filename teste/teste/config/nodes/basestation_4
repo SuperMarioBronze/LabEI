@@ -1,12 +1,12 @@
 List of parameters
 ------------------------------------------
 device_type:4
-device_id:1
-device_longitude:-8.429582118988037
-device_latitude:41.55079412159949
+device_id:4
+device_longitude:-8.426567316055298
+device_latitude:41.55236178755168
 device_elevation:0.0
 device_radius:0.0
 device_hide:0
 device_draw_battery:false
 device_sensor_unit_radius:20.0
-device_script_file_name:gatewayS1.csc
+device_script_file_name:mainGateway.csc
