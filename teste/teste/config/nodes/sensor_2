@@ -2,10 +2,11 @@ List of parameters
 ------------------------------------------
 device_type:1
 device_id:2
-device_longitude:-8.430832028388977
-device_latitude:41.550643575522564
+device_longitude:-8.430563807487488
+device_latitude:41.55055726225566
 device_elevation:0.0
 device_radius:0.0
 device_hide:0
 device_draw_battery:false
-device_sensor_unit_radius:20.0
+device_sensor_unit_radius:15.0
+device_script_file_name:temperatura.csc

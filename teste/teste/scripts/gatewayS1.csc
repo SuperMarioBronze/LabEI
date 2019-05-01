@@ -2,12 +2,12 @@ loop
 wait
 read a
 rdata $a ID Temp Zona
-
+int Temp $Temp
 print $ID $Temp
-if($Temp < 26 && $Temp>14)
-	led 13 2
+if(($Temp>14) &&($Temp<26))
+	led 1 1
 	print "Temperatura normal"
 else
-	mark 1
+	led 1 2
 	print "Fora dos valores seguros!"
 end
