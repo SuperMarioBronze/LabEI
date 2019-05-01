@@ -21,10 +21,8 @@ void setup() {
 	lcd.begin(16, 2);
 	lcd.setCursor(0,0);
 
-// ----
 }
 void loop() {
-// ----
 	xbee.readPacket();
 	if (xbee.getResponse().isAvailable()) {
 	if (xbee.getResponse().getApiId() == RX_64_RESPONSE) {
@@ -37,35 +35,10 @@ void loop() {
 	}
 
 // ----
-// ----
 	lcd.clear();
-	lcd.print(ID);
-	lcd.print(Temp);
+	lcd.print("Dados");
+	lcd.print("recebidos!");
 
-	if((-48 +  ((Temp.charAt(0)))>14) &&(Temp<26)) {
-	digitalWrite(13, 1-('1'-'1'));
-	lcd.clear();
-	lcd.print(""Temperatura");
-	lcd.print("normal"");
-
-	} 
- else {
-	digitalWrite(13, 1-('1'-'2'));
-	lcd.clear();
-	lcd.print(""Fora");
-	lcd.print("dos");
-	lcd.print("valores");
-	lcd.print("seguros!"");
-
-}
-// ----
-// ----
-	for(int i=0; i<30; i++) {
-		sdata[i] = d.charAt(i);
-	}
-	addr = XBeeAddress64(0X13A200, 0X40BEBA04);
-	tx = Tx64Request(addr, sdata, sizeof(sdata));
-	xbee.send(tx);
 
 }
 }

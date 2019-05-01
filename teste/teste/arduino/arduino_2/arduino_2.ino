@@ -11,6 +11,7 @@ uint8_t* rdata;
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
 void setup() {
+	pinMode(1, OUTPUT);
 	pinMode(13, OUTPUT);
 
 	delay(100);
@@ -20,16 +21,21 @@ void setup() {
 	lcd.begin(16, 2);
 	lcd.setCursor(0,0);
 
+// ----
 }
 void loop() {
 // ----
 	if((-48 +  (v.charAt(0)))!=X) {
+// ----
+// ----
 	lcd.clear();
-	lcd.print(v);
+	lcd.print("temp");
+	lcd.print("enviada:");
+	lcd.print(c);
 
 // ----
 	for(int i=0; i<30; i++) {
-		sdata[i] = c.charAt(i);
+		sdata[i] = d.charAt(i);
 	}
 	addr = XBeeAddress64(0X13A200, 0X40B5EF9E);
 	tx = Tx64Request(addr, sdata, sizeof(sdata));
