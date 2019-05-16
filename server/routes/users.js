@@ -35,7 +35,11 @@ router.get('/index', function(req, res, next) {
 });
 
 router.get('/add', function(req, res, next) {
-	res.render('userAdd', { title: 'Adicionar Leitura'});
+	res.render('readingAdd', { title: 'Adicionar Leitura'});
+});
+
+router.get('/addArduino', function(req, res, next) {
+	res.render('arduinoAdd', { title: 'Adicionar Leitura'});
 });
 
 router.get('/update/:id', function(req, res, next) {
@@ -80,7 +84,7 @@ router.delete('/delete/:id', function(req, res) {
 	});
 });
 
-router.post('/addUser', function(req, res, next) {
+router.post('/addReading', function(req, res, next) {
   console.log('+++++++++++++++++++++++++++++++++++++')
 	var db = req.con;
 	console.log("FormData "+ JSON.stringify(req.body));
@@ -94,5 +98,20 @@ router.post('/addUser', function(req, res, next) {
 console.log("Query "+qur.sql);
 
 });
+
+router.post('/addArduino', function(req, res, next) {
+	console.log('+++++++++++++++++++++++++++++++++++++')
+	  var db = req.con;
+	  console.log("FormData "+ JSON.stringify(req.body));
+	  var qur = db.query('INSERT INTO arduino set ? ', req.body , function(err,rows){
+		  if(err) console.log(err)
+		  console.log(rows);
+		  res.setHeader('Content-Type', 'application/json');
+		  res.redirect('/users/index');
+	  });
+	  
+  console.log("Query "+qur.sql);
+  
+  });
 
 module.exports = router;

@@ -1,0 +1,3 @@
+formatar objetos JSON
+Retirar IDs dos arduinos cujas leituras foram feitas
+Verificar se IDs existem, caso existam continua-se, caso nao existam tem de se inserir os arduinos primeiro.

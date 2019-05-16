@@ -1,0 +1,13 @@
+extends layout
+block content
+    div(class="container" id="Cool" ng-app="mainApp" ng-controller="formController")
+        h2= title
+        a(href="/users/index") Home 
+        |&nbsp;&nbsp;|&nbsp;&nbsp;
+        a(href="/users/add") Adicionar Leitura
+        form(method='post', action='/users/addArduino')
+            input(type='text', name='id_arduino', value='', placeholder='id_arduino' ng-model="id_arduino")
+            input(type='text', name='descricao', value='', placeholder='descricao' ng-model="descricao")
+            input(type='text', name='id_localizacao', value='', placeholder='id_localizacao' ng-model="id_localizacao")
+            input(type='text', name='is_enable', value='', placeholder='is_enable' ng-model="is_enable")
+            input(type='submit', value='Enviar' ng-bind="btname")
