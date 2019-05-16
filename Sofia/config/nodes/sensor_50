@@ -1,0 +1,12 @@
+List of parameters
+------------------------------------------
+device_type:1
+device_id:50
+device_longitude:-8.431173834609986
+device_latitude:41.55078536417072
+device_elevation:0.0
+device_radius:0.0
+device_hide:0
+device_draw_battery:false
+device_sensor_unit_radius:5.0
+device_script_file_name:Temperatura1zonaB.csc

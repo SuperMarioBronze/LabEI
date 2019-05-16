@@ -1,0 +1,16 @@
+extends layout
+block content
+    div(class="container" id="Cool" ng-app="mainApp" ng-controller="formController")
+        h2= title
+        a(href="/users/index") Home 
+        |&nbsp;&nbsp;|&nbsp;&nbsp;
+        a(href="/users/add") Adicionar Leitura
+        form(method='post', action='/users/addUser')
+            input(type='text', name='id_leitura', value='', placeholder='id_leitura' ng-model="id_leitura")
+            input(type='text', name='humidade', value='', placeholder='humidade' ng-model="humidade")
+            input(type='text', name='temperatura', value='', placeholder='temperatura' ng-model="temperatura")
+            input(type='text', name='timestamp', value='', placeholder='timestamp' ng-model="timestamp")
+            input(type='text', name='id_arduino', value='', placeholder='id_arduino' ng-model="id_arduino")
+            input(type='text', name='ph', value='', placeholder='ph' ng-model="ph")
+            input(type='text', name='caudal', value='', placeholder='caudal' ng-model="caudal")
+            input(type='submit', value='Enviar' ng-bind="btname")

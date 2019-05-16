@@ -1,0 +1,16 @@
+Jardim Rua Andrade Corvo/ Rua dos biscainhos
+1
+long: -8.430480659008026 lat:41.550762005163
+
+Jardim Sta Barbara
+2
+long: -8.425955772399902 lat:41.55134210660705
+
+
+Ids dos sensores:
+JARDIM:ZONA:ID
+
+1 Temperatura
+2 Humidade
+3 Luminosidade
+4 Ph
