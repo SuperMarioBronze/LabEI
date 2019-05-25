@@ -14,20 +14,39 @@ var app = express();
 var fs = require('fs');
 
 //Database
-var mysql = require("mysql");
-var con = mysql.createConnection({
-  host: "db4free.net",
-  user: "basededadosteste",
-  password: "12345678",
-  database: "basededadosteste"
-});
-con.connect(function(err){
-  if(err){
-    console.log('Error connecting to Db');
-    return;
-  }
-  console.log('Connection established');
-});
+
+var mysql = require('mysql');
+var con = mysql.createPool({
+    connectionLimit : 10000,
+    connectTimeout  : 60 * 60 * 1000,
+    acquireTimeout  : 60 * 60 * 1000,
+    timeout         : 60 * 60 * 1000,
+    host: "db4free.net",
+    user: "basededadosteste",
+    password: "12345678",
+    database: "basededadosteste",
+    multipleStatements:true
+})
+
+var server = require('./server')
+
+
+// var con = mysql.createConnection({
+//   host: "db4free.net",
+//   user: "basededadosteste",
+//   password: "12345678",
+//   database: "basededadosteste",
+//   multipleStatements:true
+// });
+
+// con.connect(function(err){
+//   if(err){
+//     console.log('Error connecting to Db');
+//     return;
+//   }
+//   console.log('Connection established');
+// });
+
 
 
 
@@ -60,38 +79,7 @@ app.use(function(req, res, next) {
 
 
 
-//Line by line reader
-var LineByLineReader = require('line-by-line'),
-    lr = new LineByLineReader('../Sofia/results/SINK_8');
 
-lr.on('error', function (err) {
-	// 'err' contains error object
-});
-
-
-var i=0;
-var json = [];
-lr.on('line', function (line) {
-  // 'line' contains the current line without the trailing newline character.
-  var array = [];
-  array[0]=line.split(' ');
-  array[0]=line.split('#')
-  array[0].splice(-1,1);
-  json[i]=JSON.stringify(array[0])
-  console.log(json[i]);
-  console.log('!!!!!!!!!!!!!!')
-  fs.writeFile("test.txt", json[i], function(err) {
-    if (err) {
-        console.log(err);
-    }
-});
-  i++;
-});
-
-
-lr.on('end', function () {
-	// All lines are read, file is closed now.
-});
 
 
 // error handler

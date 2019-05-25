@@ -12,5 +12,7 @@ rdata $c ID Parc Temp Hum Ph Lum
 
 print $a $b $c
 
-printfile $a $b $c
+printfile $a
+printfile $b
+printfile $c
 

@@ -4,6 +4,7 @@ var util = require("util");
 var fs = require("fs");
 var path = require('path');
 var url = require('url');
+var mysql = require("mysql");
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -12,10 +13,10 @@ router.get('/', function(req, res, next) {
 	db.query('SELECT * FROM leituras',function(err,rows){
 		if(err)console.log('Erro na query')
 		
-		console.log('Data received from Db:\n');
-		console.log(rows);
+		//console.log('Data received from Db:\n');
+		//console.log(rows);
 		var data = rows;
-		console.log("Outside--"+data.id);
+		//console.log("Outside--"+data.id);
 		res.render('userIndex', { title: 'Leituras', dataGet: data });
 	});
 });
@@ -27,7 +28,7 @@ router.get('/index', function(req, res, next) {
 		//if(err) throw err;
 		
 		// console.log('Data received from Db:\n');
-		console.log(rows);
+		//console.log(rows);
 		var data = rows;
 		console.log("Outside--"+data.id);
 		res.render('userIndex', { title: 'Leituras', dataGet: data });
@@ -85,7 +86,6 @@ router.delete('/delete/:id', function(req, res) {
 });
 
 router.post('/addReading', function(req, res, next) {
-  console.log('+++++++++++++++++++++++++++++++++++++')
 	var db = req.con;
 	console.log("FormData "+ JSON.stringify(req.body));
 	var qur = db.query('INSERT INTO leituras set ? ', req.body , function(err,rows){
@@ -100,7 +100,6 @@ console.log("Query "+qur.sql);
 });
 
 router.post('/addArduino', function(req, res, next) {
-	console.log('+++++++++++++++++++++++++++++++++++++')
 	  var db = req.con;
 	  console.log("FormData "+ JSON.stringify(req.body));
 	  var qur = db.query('INSERT INTO arduino set ? ', req.body , function(err,rows){
@@ -113,5 +112,135 @@ router.post('/addArduino', function(req, res, next) {
   console.log("Query "+qur.sql);
   
   });
+
+
+
+//Line by line reader------------------------------------------------------------------------------------
+var LineByLineReader = require('line-by-line'),
+    lr = new LineByLineReader('../Sofia/results/SINK_8');
+
+lr.on('error', function (err) {
+	// 'err' contains error object
+});	
+
+
+// var i=0;
+// var array = []
+// var json = []
+// lr.on('line', function (line) {
+// 	//ID Parc Temp Hum Ph Lum
+// 	// 'line' contains the current line without the trailing newline character.
+	
+// 	array[i] = (line.split('#'));  //Save line in array[i]
+// 	var text = '{ "idArduino":"'+array[i][0]+
+// 	'" , "idLocalizacao":"'		+array[i][1]+
+// 	'" , "Temperatura":"'		+array[i][2]+
+// 	'" , "Humidade":"'			+array[i][3]+
+// 	'" , "PH":"'				+array[i][4]+
+// 	'", "Luminosidade":"'		+array[i][5]+
+// 	'" }'
+// 	json[i] = JSON.parse(text)
+
+
+// 	console.log(JSON.stringify(json[i]))
+// 	//json[i]=JSON.stringify(array[0])
+// 	//console.log(json[i]);
+// 	// fs.appendFile("test.txt", array[i]+'\n', function(err) {
+// 	// 	if (err) {
+// 	// 		console.log(err);
+// 	// 	}
+// 	// 	});
+// 	i++;
+// });
+
+
+// lr.on('end', function () {
+// 	console.log('fim de leitura')
+// 	console.log(JSON.stringify(json[2].idLocalizacao))
+// 	console.log(json.length)
+// });
+
+
+router.get('/auto', function(req, res, next) {
+	//Verificar se localizacao existe
+	//verificar se arduino existe
+	//inserir leitura
+	
+	///////////////////////////////////////////////////////////////
+	// var db = req.con;
+	// console.log("FormData "+ JSON.stringify(req.body));
+	// var qur = db.query('INSERT INTO leituras set ? ', req.body , function(err,rows){
+	// 	if(err) console.log(err)
+	// 	console.log(rows);
+	// 	res.setHeader('Content-Type', 'application/json');
+	// 	res.redirect('/users/index');
+	// });
+	//////////////////////////////
+	var db = req.con;
+	//Verificar se localizacao existe
+	var j = 0
+	var i = 0
+	for(j = 0 ; j < json.length ; j++)
+	{
+		if(j==i)
+		{
+
+		}
+		idLocalizacao = json[i].idLocalizacao
+		db.query('SELECT * FROM localizacao WHERE id_localizacao = ?',idLocalizacao ,function(err,result){
+			if(err){
+				console.log("ERRO")
+				console.log(err)
+			}
+			else
+			{
+				if(result[0] != undefined){
+					//id found, continue...
+					console.log("Sucesso!")
+					console.log(result)
+				}else
+				{
+				//Id not found, need to insert it
+				
+				var text = "id_localizacao = "+idLocalizacao+",latitude=0 , longitude=0 , distrito='a' , concelho='a' , freguesia='a', parque='a', zona='0'"
+				var query = "INSERT INTO localizacao set "+ text
+				console.log(query)
+				var qur = db.query(query , function(err,rows){
+					if(err){
+						throw err
+						console.log(err)
+					} 
+					console.log("inserido!")
+					console.log(rows);
+				});
+				i++
+
+
+				}
+			}
+		});
+	 
+	}
+
+
+	
+// console.log("Query "+qur.sql);
+	res.render("auto", { title: 'Atualizar Leitura'});
+});
+
+// function insert(table,values)
+// {
+// 	var text = "id_localizacao = "+idLocalizacao+",latitude=0 , longitude=0 , distrito='a' , concelho='a' , freguesia='a', parque='a', zona='0'"
+// 	var query = "INSERT INTO localizacao set "+ text
+// 	console.log(query)
+// 	var qur = db.query(query , function(err,rows){
+// 		if(err){
+// 			throw err
+// 			console.log(err)
+// 		} 
+// 		console.log("inserido!")
+// 		console.log(rows);
+// 	});
+// }
 
 module.exports = router;
