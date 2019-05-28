@@ -18,12 +18,10 @@ var options = {
    
 var geocoder = NodeGeocoder(options);
 
-
 async function start(req,res,next){
     console.log('started!')
     for(i=0;i<json.length;i++)
     {
-        
         try{
             var checkLocal = await pool.query('SELECT * FROM localizacao WHERE id_localizacao = ?',json[i].idLocalizacao)
             if(checkLocal[0] != undefined){ //Check if location exists
@@ -32,15 +30,7 @@ async function start(req,res,next){
                 console.log(checkLocal)
             }else{
                 console.log('FAILEDLocal='+json[i].idLocalizacao) //if it doesn't, create it
-                await getLocal(41.5614,-8.39724)
-                .then(function(res){
-                    console.log("sucesso?")
-                    console.log(localidade)
-                })
-                .catch(function(fail){
-                    console.log("fail?")
-                })
-                var text = "id_localizacao = "+json[i].idLocalizacao+",latitude= "+json[i].Latitude+ ", longitude="+json[i].Longitude+ ", distrito= '"+ localidade.split('|')[0]+"', concelho= '"+localidade.split('|')[1]+"' , freguesia= '"+localidade.split('|')[2]+"', parque='a', zona='0'"
+                var text = "id_localizacao = "+json[i].idLocalizacao+",latitude= "+json[i].Latitude+ ", longitude="+json[i].Longitude+ ", distrito= 'null', concelho= 'null' , freguesia= 'null', parque='"+json[i].idParque+"', zona='"+json[i].idZona+"'"
 				var query = "INSERT INTO localizacao set "+ text
 				console.log(query)
 				var resultLocal = await pool.query(query)
@@ -58,7 +48,6 @@ async function start(req,res,next){
 				var resultLocal = await pool.query(query)
             }
             //Now that both location and arduino are ensured, proceed to populate readings...
-            console.log('---------------------------------------------')
             console.log(readings[i])
             var reading = pool.query('INSERT INTO leituras set ? ', readings[i])
             if(reading!= undefined){
@@ -71,10 +60,7 @@ async function start(req,res,next){
         }catch(err) {
             throw new Error(err)
         }
-        
-    
     }
-   
 }
 var zip=''
 var localidade=''
@@ -149,13 +135,33 @@ var i=0;
 var array = []
 var json = []
 var readings =[]
-console.log("!!!!!!!!!!!!!!!!===========!!!!!!!!!")
 lr.on('line', function (line) {
     //ID Parc Temp Hum Ph Lum
     // 'line' contains the current line without the trailing newline character.
-    
     array[i] = (line.split('#'));  //Save line in array[i]
-    var text = '{ "idArduino":"'    +array[i][0]+
+    var ids=array[i][0].split("")
+    var idArduino = 0
+    var idParque = 0
+    var idZona= 0
+    var cont=0
+    for(j=ids.length;j>0;j--)       //invert id number order
+    {
+        if(cont==0) //1st number is the arduino's LOCAL ID (meaning it's only for that area)
+        {
+            idArduino=ids[j-1] //not going to be used...
+            cont++
+        }
+        else if(cont==1) //2nd number is the area's ID
+        {
+            idZona=ids[j-1]
+            cont++
+        }else if(cont>1) //rest of the numbers are the park's ID
+        {
+            idParque+=ids[j-1]
+        }
+    }
+    cont=0
+    var text = '{ "idArduino":"'    +aray[i][0]+
     '" , "idLocalizacao":"'		    +array[i][1]+
     '" , "Temperatura":"'		    +array[i][2]+
     '" , "Humidade":"'			    +array[i][3]+
@@ -163,8 +169,11 @@ lr.on('line', function (line) {
     '", "Luminosidade":"'		    +array[i][5]+
     '", "Longitude":"'		        +array[i][6]+
     '", "Latitude":"'		        +array[i][7]+
+    '", "parque":"'		            +idParque+
+    '", "zona":"'                   +idZona+
     '" }'
     json[i] = JSON.parse(text)
+    console.log(json[i])
     var leitura     = '{ "humidade":"'  +array[i][3]+
     '" , "temperatura":"'		        +array[i][2]+
     '" , "id_arduino":"'		        +array[i][0]+
@@ -172,13 +181,6 @@ lr.on('line', function (line) {
     '" , "caudal":"'				    +array[i][5]+
     '" }'
     readings[i] = JSON.parse(leitura)
-    //json[i]=JSON.stringify(array[0])
-    //console.log(json[i]);
-    // fs.appendFile("test.txt", array[i]+'\n', function(err) {
-    // 	if (err) {
-    // 		console.log(err);
-    // 	}
-    // 	});
     i++;
 });
 
@@ -186,7 +188,7 @@ lr.on('end', async function () {
  console.log('fim de leitura')
  console.log(JSON.stringify(json[2].idLocalizacao))
  console.log(json.length)
- start();
+ //start();
 })
 
 
