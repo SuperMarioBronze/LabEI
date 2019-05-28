@@ -16,11 +16,12 @@ var fs = require('fs');
 //Database
 
 var mysql = require('mysql');
+
 var con = mysql.createPool({
-    connectionLimit : 10000,
-    connectTimeout  : 60 * 60 * 1000,
-    acquireTimeout  : 60 * 60 * 1000,
-    timeout         : 60 * 60 * 1000,
+    connectionLimit : 1000,
+    connectTimeout  : 60 * 60 * 100000,
+    acquireTimeout  : 60 * 60 * 100000,
+    timeout         : 60 * 60 * 100000,
     host: "db4free.net",
     user: "basededadosteste",
     password: "12345678",
