@@ -9,15 +9,15 @@ const promisify = util.promisify;
 var app = express()
 
 //setup geocoder 
-var options = {
+/* var options = {
     provider: 'google',
     // Optional depending on the providers
     httpAdapter: 'https', // Default
-    apiKey: 'AIzaSyDoKU0k2fWK3nrZ-SHmvcT6Up3OJkGa4qk', // for Mapquest, OpenCage, Google Premier
+    apiKey: '', // API key  //for Mapquest, OpenCage, Google Premier
     formatter: null         // 'gpx', 'string', ...
   };
    
-var geocoder = NodeGeocoder(options);
+var geocoder = NodeGeocoder(options); */
 
 async function start(req,res,next){
     console.log('started!')
@@ -66,9 +66,9 @@ async function start(req,res,next){
 
 var zip=''
 var localidade=''
-async function getLocal(lati,longi)
+/* async function getLocal(lati,longi)
 {
-    options.apiKey='AIzaSyDoKU0k2fWK3nrZ-SHmvcT6Up3OJkGa4qk'
+    options.apiKey='' //API key
     return geocoder.reverse({lat:lati, lon:longi})  //recebe dados json do local
     .then(async function(res) {
         zip=res[0].zipcode
@@ -85,7 +85,7 @@ async function getLocal(lati,longi)
 
 
 
-}
+} */
 
 
 async function getDist(zip)
