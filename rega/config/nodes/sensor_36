@@ -1,0 +1,12 @@
+List of parameters
+------------------------------------------
+device_type:1
+device_id:36
+device_longitude:-8.421757764434815
+device_latitude:41.55145507035089
+device_elevation:0.0
+device_radius:0.0
+device_hide:0
+device_draw_battery:false
+device_sensor_unit_radius:5.0
+device_script_file_name:Ph.csc

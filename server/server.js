@@ -4,6 +4,7 @@ var NodeGeocoder = require('node-geocoder');
 var axios = require('axios');
 var parseString = require('xml2js').parseString;
 var util = require('util');
+const fs = require('fs');
 const promisify = util.promisify;
 var app = express()
 
@@ -62,6 +63,7 @@ async function start(req,res,next){
         }
     }
 }
+
 var zip=''
 var localidade=''
 async function getLocal(lati,longi)
@@ -121,10 +123,18 @@ async function getDist(zip)
         console.log(err);
     });
 }
-
  //Line by line reader------------------------------------------------------------------------------------
+
+//backup readings
+fs.copyFile('../rega/results/SINK_8', '../rega/results/SINK_8BACKUP', (err) => {
+    if (err) throw err;
+    console.log('Backup was copied to destination.txt');
+  });
+
+
  var LineByLineReader = require('line-by-line'),
- lr = new LineByLineReader('../Sofia/results/SINK_8');
+ lr = new LineByLineReader('../rega/results/SINK_8BACKUP');
+
 
 lr.on('error', function (err) {
  // 'err' contains error object
@@ -139,6 +149,7 @@ lr.on('line', function (line) {
     //ID Parc Temp Hum Ph Lum
     // 'line' contains the current line without the trailing newline character.
     array[i] = (line.split('#'));  //Save line in array[i]
+    console.log(array[i])
     var ids=array[i][0].split("")
     var idArduino = 0
     var idParque = 0
@@ -161,14 +172,14 @@ lr.on('line', function (line) {
         }
     }
     cont=0
-    var text = '{ "idArduino":"'    +aray[i][0]+
+    var text = '{ "idArduino":"'    +array[i][0]+
     '" , "idLocalizacao":"'		    +array[i][1]+
     '" , "Temperatura":"'		    +array[i][2]+
     '" , "Humidade":"'			    +array[i][3]+
     '" , "PH":"'				    +array[i][4]+
     '", "Luminosidade":"'		    +array[i][5]+
-    '", "Longitude":"'		        +array[i][6]+
-    '", "Latitude":"'		        +array[i][7]+
+    '", "Longitude":"'		        +array[i][7]+
+    '", "Latitude":"'		        +array[i][8]+
     '", "parque":"'		            +idParque+
     '", "zona":"'                   +idZona+
     '" }'
@@ -178,7 +189,7 @@ lr.on('line', function (line) {
     '" , "temperatura":"'		        +array[i][2]+
     '" , "id_arduino":"'		        +array[i][0]+
     '" , "ph":"'			            +array[i][4]+
-    '" , "caudal":"'				    +array[i][5]+
+    '" , "caudal":"'				    +array[i][6]+
     '" }'
     readings[i] = JSON.parse(leitura)
     i++;
@@ -186,10 +197,8 @@ lr.on('line', function (line) {
 
 lr.on('end', async function () {
  console.log('fim de leitura')
- console.log(JSON.stringify(json[2].idLocalizacao))
  console.log(json.length)
- //start();
+ start();
 })
-
 
 app.use(start)

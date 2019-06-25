@@ -1,0 +1,10 @@
+List of parameters
+------------------------------------------
+device_type:2
+device_id:69
+device_longitude:-8.430826313114167
+device_latitude:41.55080872272394
+device_elevation:0.0
+device_radius:10.0
+device_hide:0
+natural_event_file_name:HUMI2.evt

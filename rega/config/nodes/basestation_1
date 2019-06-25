@@ -1,0 +1,12 @@
+List of parameters
+------------------------------------------
+device_type:4
+device_id:1
+device_longitude:-8.430105149745941
+device_latitude:41.5506235026987
+device_elevation:0.0
+device_radius:0.0
+device_hide:0
+device_draw_battery:false
+device_sensor_unit_radius:10.0
+device_script_file_name:gatewayzoneA.csc
